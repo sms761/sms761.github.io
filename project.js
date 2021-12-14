@@ -108,6 +108,7 @@ let superSector = {
       }
     };
 //    console.log(config);
+let x= 0
 function drawChart(){
     const myChart = new Chart(
       document.getElementById('myChart'),
@@ -126,7 +127,8 @@ function drawChart(){
           backgroundcolor: CHART_COLORS_50_Percent[chartColorsArray[responseCount]], hidden: true 
         }
       console.log("here");
-      console.log(this.response.Results);
+      console.log(this.response.Results)
+      if (this.response.status == "REQUEST_SUCCEEDED") {
       let superSectorID= this.response.Results.series[0].seriesID;
       datasetElement.label = superSector[superSectorID.substring(3,5)];
       let dataArray= this.response.Results.series[0].data;
@@ -143,18 +145,31 @@ function drawChart(){
       }
       console.log(this.response);
     }
-      else {
-      console.log ("error");
+    else if (this.response.status === "REQUEST_NOT_PROCESSED"){
+      x=x+1
+      if (x==22) {
+        alert("Sorry, your API key seems to be invalid. Please follow the registration link from the Getting Started Page of the US Department of Labor Statistics Webpage to obtain an API key. The information can be found here: https://www.bls.gov/developers/. After registering you will receive an email to validate your key. After validating, your key will be what is after 'https://data.bls.gov/registrationEngine/validateKey/' and before the '~~~{your email address}. Once you have confirmed you have the correct API key, click 'Ok' and try again!")
+        window.location.reload()
       }
+    }
   }
-  
-  let SuperSectorKeys = Object.keys(superSector);
-  for (let i=0;i< SuperSectorKeys.length; i++) {
-    let xhr = new XMLHttpRequest();
-    xhr.responseType = "json";
-    xhr.addEventListener("load", responseReceivedHandler);
-    let startquery =  "https://api.bls.gov/publicAPI/v2/timeseries/data/CEU";
-    let endquery= "00000001?registrationkey=adec9c18a64c407997431564cac7815d";
-    xhr.open("GET", startquery + SuperSectorKeys[i]+endquery);
-    xhr.send();
+      else{
+        console.log ("error");
+      }
+    
+}
+  function API(input){
+    let SuperSectorKeys = Object.keys(superSector);
+    for (let i=0;i< SuperSectorKeys.length; i++) {
+      let xhr = new XMLHttpRequest();
+      xhr.responseType = "json";
+      xhr.addEventListener("load", responseReceivedHandler);
+      let startquery =  "https://api.bls.gov/publicAPI/v2/timeseries/data/CEU";
+      let endquery= "00000001?registrationkey=" + input;
+      let link =startquery + SuperSectorKeys[i]+endquery
+      xhr.open("GET", link, true);
+      xhr.send();
+    }
   }
+
+API(prompt("Enter your API Key"))
