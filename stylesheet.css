@@ -18,6 +18,15 @@ html {
     background-size: cover
 }
 
-script{
-    color: white
+a:link {
+  color: white;
+}
+
+
+a:visited {
+  color: white;
+}
+
+a:hover {
+  color: red;
 }
