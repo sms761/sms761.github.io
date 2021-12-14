@@ -102,7 +102,7 @@ let superSector = {
           },
           title: {
             display: true,
-            text: 'Number of Employers (thousands)'
+            text: 'Number of Employees (thousands)'
           }
         }
       }
